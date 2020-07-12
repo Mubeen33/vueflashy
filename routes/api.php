@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,23 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('admin/store-vendor','Admin\SellerController@storeVendor');
+Route::get('admin/sellers-list','Admin\SellerController@sellersList');
+Route::get('admin/seller-details/{id}','Admin\SellerController@sellerDetails');
+
+Route::post('admin/store-seller','Admin\SellerRequestController@storeSellerRequest');
+
+
+Route::get('/admin/get-categories','Admin\ProductController@getCategories');
+Route::get('/seller/categories-child/{id}','Admin\ProductController@getCatChild');
+
+Route::post('/seller/store-product','Admin\ProductController@storeProduct');
+
+Route::post('/seller/store-variation','VariationController@storeVariation');
+Route::get('/seller/get-product-variations/{id}','VariationController@getProductVariations');
+Route::post('/seller/store-option','VariationController@storeOption');
+
+
+
+

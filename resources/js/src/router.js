@@ -64,15 +64,49 @@ const router = new Router({
             rule: 'admin'
           }
         },
-
-
         // =============================================================================
         // Application Routes
         // =============================================================================
+
+
+         // Custom Routes Starts From Here For ADMIN ==========================
+          {
+              path: '/admin/add-seller',
+              name: 'add-seller',
+              component: () => import('./views/admin/sellers/AddSellers'),
+              meta: {
+                  rule: 'admin'
+              }
+          },
+          {
+              path: '/admin/sellers-list',
+              name: 'sellers-list',
+              component: () => import('./views/admin/sellers/SellersList'),
+              meta: {
+                  rule: 'admin'
+              }
+          },
+          {
+              path: 'admin/seller-details/:id',
+              name: 'seller-details',
+              component: () => import('./views/admin/sellers/SellerDetails'),
+              meta: {
+                  rule: 'admin'
+              }
+          },
+          {
+              path: '/seller/add-product',
+              name: 'seller-add-product',
+              component: () => import('./views/seller/products/AddProduct'),
+              meta: {
+                  rule: 'editor',
+              }
+          },
+
         {
-          path: '/apps/todo',
-          redirect: '/apps/todo/all',
-          name: 'todo'
+           path: '/apps/todo',
+           redirect: '/apps/todo/all',
+           name: 'todo'
         },
         {
           path: '/apps/todo/:filter',
@@ -1387,7 +1421,7 @@ router.afterEach(() => {
 })
 
 router.beforeEach((to, from, next) => {
-  firebase.auth().onAuthStateChanged(() => {
+    firebase.auth().onAuthStateChanged(() => {
 
     // get firebase current user
     const firebaseCurrentUser = firebase.auth().currentUser

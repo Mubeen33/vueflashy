@@ -21,6 +21,9 @@ Vue.use(Vuesax)
 import axios from './axios.js'
 Vue.prototype.$http = axios
 
+// Base Domain To Call Api
+Vue.prototype.$baseApiDomain = "http://127.0.0.1:8000"
+
 // API Calls
 import './http/requests'
 

@@ -305,9 +305,11 @@ export default {
     return new Promise((resolve, reject) => {
       jwt.login(payload.userDetails.email, payload.userDetails.password)
         .then(response => {
-
+           console.log(response);
           // If there's user data in response
           if (response.data.userData) {
+              console.log('response');
+              console.log(response);
             // Navigate User to homepage
             router.push(router.currentRoute.query.to || '/')
 

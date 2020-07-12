@@ -49,6 +49,57 @@ export default [
       }
     ]
   },
+
+
+    // Custom Nav Items Starts From  Here
+    {
+        url: null,
+        name: 'Manage Sellers',
+        tagColor: 'warning',
+        icon: 'UsersIcon',
+        i18n: 'ManageSeller',
+        submenu: [
+            {
+                url: '/admin/seller-requests',
+                name: 'Seller Requests',
+                slug: 'sellers-requests',
+                i18n: 'SellerRequests'
+            },
+            {
+                url: '/admin/add-seller',
+                name: 'Add Seller',
+                slug: 'add-seller',
+                i18n: 'AddSeller'
+            },
+            {
+                url: '/admin/sellers-list',
+                name: 'Seller List',
+                slug: 'sellers-list',
+                i18n: 'SellerList'
+            }
+        ]
+    },
+
+
+
+     // Custom Routes For Sellers Starts From Here
+    {
+        url: null,
+        name: 'Manage Products',
+        tagColor: 'warning',
+        icon: 'GiftIcon',
+        i18n: 'ManageProducts',
+        submenu: [
+            {
+                url: '/seller/add-product',
+                name: 'Add Product',
+                slug: 'sellers-requests',
+                i18n: 'AddProduct'
+            },
+        ]
+    },
+
+
   {
     header: 'Apps',
     icon: 'PackageIcon',
@@ -393,7 +444,7 @@ export default [
             name: 'Quill Editor',
             icon: 'EditIcon',
             slug: 'extra-component-quill-editor',
-            i18n: 'QuillEditor'
+                i18n: 'QuillEditor'
           },
           {
             url: '/extensions/drag-and-drop',
