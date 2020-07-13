@@ -35,7 +35,7 @@
                                 <div class="row pl-2">
                                     <div class="col-md-4">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" value="text" name="display_option" v-model="variation.display_type" id="customRadio1" >
+                                            <input  @change="radioOptionChanged" type="radio" class="custom-control-input" value="text" name="display_option" v-model="variation.display_type" id="customRadio1" >
                                             <label class="custom-control-label label-font" for="customRadio1" >
                                                 Text
                                             </label>
@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" v-model="variation.display_type" class="custom-control-input" value="image" name="display_option" id="customRadio2">
+                                            <input @change="radioOptionChanged" type="radio" v-model="variation.display_type" class="custom-control-input" value="image" name="display_option" id="customRadio2">
                                             <label class="custom-control-label label-font" for="customRadio2" >
                                                 Image
                                             </label>
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" v-model="variation.display_type" class="custom-control-input" value="color" name="display_type" id="customRadio3">
+                                            <input @change="radioOptionChanged" type="radio" v-model="variation.display_type" class="custom-control-input" value="color" name="display_type" id="customRadio3">
                                             <label class="custom-control-label label-font" for="customRadio3" >
                                                 Color
                                             </label>
@@ -82,27 +82,27 @@
                                 </div>
                             </div>
 
-                            <div v-if="is_dif_price" class="col-md-11 pt-5 div-price pb-1">
-                                <h5 class=" font-theme">Use Different Price for Options</h5>
-                                <div class="row pl-2">
-                                    <div class="col-md-4">
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" v-model="variation.is_different_price" value="1" name="is_different_price" id="customRadio52" required>
-                                            <label class="custom-control-label label-font" for="customRadio52" >
-                                                Yes
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" v-model="variation.is_different_price" value="0" name="is_different_price" id="customRadio222" required>
-                                            <label class="custom-control-label label-font" for="customRadio222" >
-                                                No
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<!--                            <div v-if="is_dif_price" class="col-md-11 pt-5 div-price pb-1">-->
+<!--                                <h5 class=" font-theme">Use Different Price for Options</h5>-->
+<!--                                <div class="row pl-2">-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <div class="custom-control custom-radio">-->
+<!--                                            <input type="radio" class="custom-control-input" v-model="variation.is_different_price" value="1" name="is_different_price" id="customRadio52" required>-->
+<!--                                            <label class="custom-control-label label-font" for="customRadio52" >-->
+<!--                                                Yes-->
+<!--                                            </label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <div class="custom-control custom-radio">-->
+<!--                                            <input type="radio" class="custom-control-input" v-model="variation.is_different_price" value="0" name="is_different_price" id="customRadio222" required>-->
+<!--                                            <label class="custom-control-label label-font" for="customRadio222" >-->
+<!--                                                No-->
+<!--                                            </label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
                             <div class="col-md-11 pt-5 text-right">
                                 <button type="submit" class="vs-component vs-button vs-button-primary vs-button-filled">
@@ -159,7 +159,7 @@
                             <div class="form-group mb-1">
                                 <h3 class="mt-4 mb-1">Add Option Images</h3>
                                 <div class="mt-4">
-                                    <vs-upload multiple text="Product Images" action="https://jsonplaceholder.typicode.com/posts/" @on-success="successUpload" />
+                                    <vs-upload multiple automatic fileName="option_image" text="Product Images" :action="this.$baseApiDomain+'/api/seller/store-option-images'" @on-success="optionUploadImg" />
                                 </div>
 
                             </div>
@@ -231,7 +231,7 @@
                                             <vs-checkbox name="is_physical" v-model="product.is_physical" value='1'>
                                                  <span class="text-dark pl-2"> Physical</span>
                                             </vs-checkbox>
-                                                  <small class="padding-left text-dark">A tangible product that you will ship to buyers</small>
+                                            <small class="padding-left text-dark">A tangible product that you will ship to buyers</small>
                                         </div>
                                     </div>
                                     <div class="col-md-6 pt-3">
@@ -292,24 +292,25 @@
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label for="title">Product Title</label>
-                                            <input type="text" class="form-control" v-model="product.title" placeholder="Product Title" id="title" required>
+                                            <input type="text" class="form-control" name="title" v-model="product.title" placeholder="Product Title" id="title" v-validate="'required'">
+                                            <span class="text-danger text-sm" v-show="errors.has('title')">{{ errors.first('title') }}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label for="sku">Product Sku</label>
-                                            <input type="text" v-model="product.sku" class="form-control" placeholder="Product Title" id="sku" required>
+                                            <input type="text" v-model="product.sku" class="form-control" name="sku" placeholder="Product Title" id="sku" v-validate="'required'">
+                                            <span class="text-danger text-sm" v-show="errors.has('sku')">{{ errors.first('sku') }}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label for="category_tree">Select Category</label>
-                                            <input @focus="showCategoriesBox" type="text" class="form-control"  placeholder="Product Category" id="category_tree" readonly required>
+                                            <input @focus="showCategoriesBox" type="text" name="category" class="form-control"  placeholder="Product Category" id="category_tree" readonly v-validate="'required'">
+                                            <span class="text-danger text-sm" v-show="errors.has('category')">{{ errors.first('category') }}</span>
                                         </div>
                                     </div>
-
                                     <input type="hidden" name="category_id" v-model="product.category_id">
-
                                     <div v-if="cat_box" class="col-12 border categories-box bg-light-badge pt-1 pb-1">
                                         <div class="row categories-row">
                                             <div class="col-md-3 cat-one pr-0" >
@@ -350,7 +351,7 @@
                                         <small>Products  with good and clear images sold faster .. ! </small>
 
                                         <div class="mt-4">
-                                            <vs-upload multiple text="Product Images" action="https://jsonplaceholder.typicode.com/posts/" @on-success="successUpload" />
+                                            <vs-upload multiple fileName='product_image' automatic   action="http://127.0.0.1:8000/api/seller/store-product-images" @on-success="successUpload" @on-delete="imageDelete" />
                                         </div>
                                     </div>
                                 </div>
@@ -360,7 +361,7 @@
                     <div class="col-md-12 pb-3">
                         <h3 class="mt-4 mb-1">Product Description</h3>
                         <small>Add brief description of your product .. ! </small>
-                        <textarea rows="4" class="form-control" name="Product Description" v-model="product.product_description" placeholder="Description"></textarea>
+                        <textarea rows="4" class="form-control" name="Product Description" v-model="product.product_description" placeholder="Description"  v-validate="'required'"></textarea>
                     </div>
                     <div class="col-md-12 text-right pt-5">
                             <button type="submit" class="vs-component vs-button vs-button-primary vs-button-filled mt-3">
@@ -405,8 +406,12 @@
                                         <tbody>
                                         <tr v-for="vary in variations">
                                             <td>{{vary.id}}</td>
-                                            <td>{{vary.label}}</td>
-                                            <td>{{vary.variation_type}}</td>
+                                            <td class="text-capitalize">
+                                                {{vary.label}}
+                                            </td>
+                                            <td class="text-capitalize">
+                                                {{vary.variation_type}}
+                                            </td>
                                             <td>
                                                 <button @click="addOptionPopup(vary)" class="btn btn-primary btn-sm" type="button">
                                                   <i class="feather icon-plus"></i>  Add option
@@ -416,10 +421,10 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-info btn-sm" type="button">
-                                                    <i class="feather icon-edit"></i>   Edit
-                                                </button>
-                                                <button class="btn btn-danger btn-sm" type="button">
+<!--                                                <button class="btn btn-info btn-sm" type="button">-->
+<!--                                                    <i class="feather icon-edit"></i>   Edit-->
+<!--                                                </button>-->
+                                                <button @click="deleteVariation(vary.id)" class="btn btn-danger btn-sm" type="button">
                                                     <i class="feather icon-trash"></i>  Delete
                                                 </button>
                                             </td>
@@ -460,12 +465,55 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12 text-right pt-5">
+                            <button type="button" @click="goNext"  class="vs-component vs-button vs-button-primary vs-button-filled mt-3">
+                                Save & Next <i class="feather icon-arrow-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </tab-content>
 
                 <!-- tab 3 content -->
                 <tab-content title="Step 3" class="mb-5">
+                    <div class="col-md-12 mt-2">
+                        <div class="card">
+                            <div class="card-body border">
+                                <div class="row pb-4">
+                                    <div class="col-md-12">
+                                        <h3 class="mb-3">Product Preview</h3>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="title">Product Title</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="sku">Product Sku</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="category_tree">Selected Category</label>
+                                        </div>
+                                    </div>
 
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label for="sku">Product Description</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 pt-5">
+                                        <h3 class="mt-4 mb-1">Product Images</h3>
+                                        <div class=" col-md-3 pr-0 mt-4">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </tab-content>
 
             </form-wizard>
@@ -504,9 +552,9 @@
                 isButtonDisabled : true,
                 popupActive : false,
                 popupShowOption: false,
-                is_dif_price : true,
-                is_image : true,
-                is_display_option : true,
+                is_dif_price : false,
+                is_image : false,
+                is_display_option : false,
 
                 product :  {
                 category_id : null,
@@ -516,12 +564,12 @@
                 product_for_list : false,
                 title : '',
                 sku : '',
-                images : [],
+                product_images :[],
                 product_description : ''
                 },
                 //For final Submission
                 is_submitted : false,
-
+                 saved_product : {},
                 product_id : null,
 
                 variation : {
@@ -532,6 +580,7 @@
                     is_different_price : false,
                     product_id : '',
                 },
+
 
                 variations : [],
                 variation_types: [
@@ -554,6 +603,7 @@
                     image : '',
                     selling_price : '',
                     variation_id : '',
+                    option_images : [],
                 },
                 options : [],
             }
@@ -568,8 +618,35 @@
             formSubmitted () {
                 alert()
             },
-            successUpload(){
+            successUpload(event){
+             console.log('image success');
+                let filePaths = event.currentTarget.response;
+                let str = filePaths.replace(/^"/, "");
+                str = str.replace(/"$/, "");
+                this.product.product_images.push(str);
+                console.log(this.product.product_images);
 
+            },
+            imageDelete(event){
+                console.log(event)
+            },
+            optionUploadImg(event){
+                let filePaths = event.currentTarget.response;
+                let str = filePaths.replace(/^"/, "");
+                str = str.replace(/"$/, "");
+                console.log(str);
+                this.option.option_images.push(str);
+                console.log(this.option.option_images);
+            },
+            successNotify(msg){
+                this.$vs.notify({
+                    title:'Position top-right',
+                    text: msg,
+                    color:'success',
+                    position:'top-right',
+                    icon : 'check_box',
+                    time : 6000
+                })
             },
             checkElement(){
 
@@ -578,17 +655,22 @@
                 this.cat_box = true;
             },
             saveProduct(){
-                let obj = this;
-                this.$http.post(this.$baseApiDomain+"/api/seller/store-product",this.product)
-                .then( response => {
-                    if (response.status === 200 || response.statusText === "OK"){
-                        obj.product_id = response.data.id;
-                        obj.goNext();
-                    }
-                   console.log("Product Is Here ..........");
-                    obj.variation.product_id = obj.product_id;
-                   console.log(obj.variation.product_id);
-                });
+                this.$validator.validateAll().then(result => {
+                        if (result) {
+                            let obj = this;
+                            this.$http.post(this.$baseApiDomain+"/api/seller/store-product",this.product)
+                                .then( response => {
+                                    if (response.status === 200 || response.statusText === "OK"){
+                                        obj.product_id = response.data.id;
+                                        obj.saved_product = response.data;
+                                        obj.successNotify("Product Has Been Saved Successfully.!");
+                                        obj.goNext();
+                                    }
+                                    console.log("Product Is Here ..........");
+                                    obj.variation.product_id = obj.product_id;
+                                    console.log(obj.variation.product_id);
+                                });
+                        }});
             },
             goNext(){
                 this.$refs.wizard.nextTab();
@@ -601,6 +683,7 @@
                     .then( response => {
                         if (response.status === 200 || response.statusText === "OK"){
                             obj.refreshVariation();
+                            obj.successNotify("Variation Created Successfully ...!");
                         }
                 });
                 this.fetchVariations(this.variation);
@@ -612,6 +695,13 @@
                         console.log(this.variations);
                     });
             },
+            deleteVariation(var_id){
+                this.$http.get(this.$baseApiDomain+"/api/seller/delete-variation/"+var_id)
+                    .then( response => {
+                        this.fetchVariations();
+                        this.successNotify(response.data);
+                    });
+            },
             addOptionPopup(variation){
              this.addOptionsVariation = variation;
              this.popupAddOption = true;
@@ -619,41 +709,44 @@
 
             saveOption(variation_id){
               let url = this.$baseApiDomain+"/api/seller/store-option"
+              let obj = this;
               this.option.variation_id = variation_id;
-              this.$http.post(url,this.option).then(response => {
-                   console.log(response);
-                  this.popupAddOption = false;
+              this.$http.post(url,obj.option).then(response => {
+                  if (response.status === 200 || response.statusText === "OK"){
+                  obj.successNotify("A New Option Has Been Added ...!");
+                  obj.popupAddOption = false;
+                  obj.option.selling_price = '';
+                  obj.option.option_name = '';
+                  obj.fetchVariations();
+                  }
               });
-              this.option.selling_price = '';
-              this.option.option_name = '';
-              this.fetchVariations();
             },
 
             getOptions(variation_options){
                this.options = variation_options;
                 this.popupShowOption = true;
             },
+
             variationChanged(){
                 let type = this.variation.variation_type;
                 if (type === "radio_btn"){
-                    this.is_dif_price = true;
-                    this.is_image = true;
+                    this.is_image = false;
                     this.is_display_option = true;
                 }if(type === "dropdown"){
-                    this.is_dif_price = true;
+                    this.is_image = false;
+                    this.is_display_option = false;
+                }
+                if (type === "checkbox"){
                     this.is_image = false;
                     this.is_display_option = true;
                 }
-                if (type === "checkbox"){
-                    this.is_dif_price = true;
-                    this.is_image = true;
-                    this.is_display_option = false;
-                }
                 if (type === "text" || type === "number"){
-                    this.is_dif_price = false;
                     this.is_image = false;
                     this.is_display_option = false;
                 }
+            },
+            radioOptionChanged(){
+                this.is_image = this.variation.display_type === "image";
             },
             refreshVariation(){
                 this.variation.label = '';
@@ -661,13 +754,9 @@
                 this.variation.display_type = '';
                 this.variation.is_option_on_slider = false;
                 this.variation.is_different_price = false;
-
                 this.popupActive = false;
             },
         },
-
-
-
         mounted() {
             let obj = this;
             // Jquery code for select category

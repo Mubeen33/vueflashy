@@ -29,10 +29,13 @@ Route::get('/admin/get-categories','Admin\ProductController@getCategories');
 Route::get('/seller/categories-child/{id}','Admin\ProductController@getCatChild');
 
 Route::post('/seller/store-product','Admin\ProductController@storeProduct');
+Route::post('/seller/store-product-images','Admin\ProductController@storeProductImages');
 
 Route::post('/seller/store-variation','VariationController@storeVariation');
 Route::get('/seller/get-product-variations/{id}','VariationController@getProductVariations');
+Route::get('/seller/delete-variation/{id}','VariationController@deleteVariation');
 Route::post('/seller/store-option','VariationController@storeOption');
+Route::post('/seller/store-option-images','VariationController@storeOptionsImages');
 
 
 

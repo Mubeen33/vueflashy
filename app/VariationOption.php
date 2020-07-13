@@ -15,6 +15,6 @@ class VariationOption extends Model
 
 
     public function saveOption($form_data){
-        $this::create($form_data);
+        return  $this::create($form_data);
     }
 }
