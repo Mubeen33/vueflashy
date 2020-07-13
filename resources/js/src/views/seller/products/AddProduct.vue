@@ -214,7 +214,7 @@
 
 
 
-            <form-wizard ref="wizard" color="rgba(var(--vs-primary), 1)" :title="null" :subtitle="null" :hide-buttons="true" finishButtonText="Submit">
+            <form-wizard ref="wizard" color="rgba(var(--vs-primary), 1)" :title="null" :subtitle="null" :hide-buttons="false" finishButtonText="Submit">
                 <tab-content title="Step 1" class="mb-5">
                 <form @submit.prevent="saveProduct" method="post" enctype="multipart/form-data">
 
@@ -480,11 +480,11 @@
                             <div class="card-body border">
                                 <div class="row pb-4">
                                     <div class="col-md-12">
-                                        <h3 class="mb-3">Product Preview</h3>
+                                        <h3 class="mb-3 text-center">Product Preview</h3>
                                     </div>
                                     <div class="col-lg-8">
                                         <div class="form-group">
-                                            <label for="title">Product Title</label>
+                                            <h4 for="title">Product Title</h4>
                                         </div>
                                     </div>
                                     <div class="col-lg-8">

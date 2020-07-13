@@ -312,10 +312,8 @@ export default {
               console.log(response);
             // Navigate User to homepage
             router.push(router.currentRoute.query.to || '/')
-
             // Set accessToken
             localStorage.setItem('accessToken', response.data.accessToken)
-
             // Update user details
             commit('UPDATE_USER_INFO', response.data.userData, {root: true})
 
